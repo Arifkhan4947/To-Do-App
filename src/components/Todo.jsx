@@ -1,14 +1,27 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import todo_icon from '../assets/todo_icon.png';
 import TodoItem from './TodoItem';
 
 const Todo = () => {
 
+    const [todoList, setTodoList] = useState([]);
+
     const inputRef = useRef();
 
     const add = () => {
         const inputText = inputRef.current.value.trim(); 
-        console.log(inputText);
+
+        if(inputText === "" ){
+            return null;
+        }
+        
+        const newTodo = {
+            id: Date.now(),
+            text: inputText,
+            isComplete: false,
+        }
+        setTodoList((prev) =>[...prev, newTodo]);
+        inputRef.current.value = "";
     }
 
   return (
@@ -29,8 +42,12 @@ const Todo = () => {
     
     {/* --------- todo list --------- */}
         <div>
-            <TodoItem text="Learn Coding"/>
-            <TodoItem text="Learn Coding from Arif khan"/>
+
+            {
+                todoList.map((item, index) => {
+                    return <TodoItem key={index} text={item.text} id={item.id} isComplete={item.isComplete}/>
+                })
+            }
         </div>
         
 
